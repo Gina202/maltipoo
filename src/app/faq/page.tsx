@@ -17,7 +17,7 @@ export default function FAQPage() {
   return (
     <div className="mx-auto max-w-2xl px-6 py-16 sm:py-20">
       <SectionHeading eyebrow="Questions" title="Frequently asked questions" />
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion className="w-full">
         {FAQS.map((faq, i) => (
           <AccordionItem key={i} value={`item-${i}`}>
             <AccordionTrigger className="text-left font-display text-base text-(--color-ink)">
