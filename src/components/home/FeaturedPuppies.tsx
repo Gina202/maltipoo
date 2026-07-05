@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { PuppyCard } from "@/components/puppies/PuppyCard";
 import { buttonVariants } from "@/components/ui/button";
-import { FEATURED_PUPPIES } from "@/constants/placeholder-data";
+import { ALL_PUPPIES } from "@/constants/placeholder-data";
 
 export function FeaturedPuppies() {
   return (
@@ -15,7 +15,7 @@ export function FeaturedPuppies() {
         />
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURED_PUPPIES.map((puppy) => (
+          {ALL_PUPPIES.slice(0, 3).map((puppy) => (
             <PuppyCard key={puppy.slug} puppy={puppy} />
           ))}
         </div>

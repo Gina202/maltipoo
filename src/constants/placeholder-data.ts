@@ -12,9 +12,17 @@ export type PlaceholderPuppy = {
   price: number;
   status: "available" | "reserved" | "sold";
   placeholderColor: string;
+  galleryColors: string[];
+  personality: string;
+  healthInfo: string;
+  vaccinationStatus: string;
+  readyDate: string;
+  expectedAdultWeightLbs: number;
+  motherSlug: string;
+  fatherSlug: string;
 };
 
-export const FEATURED_PUPPIES: PlaceholderPuppy[] = [
+export const ALL_PUPPIES: PlaceholderPuppy[] = [
   {
     slug: "bella",
     name: "Bella",
@@ -23,6 +31,16 @@ export const FEATURED_PUPPIES: PlaceholderPuppy[] = [
     price: 2800,
     status: "available",
     placeholderColor: "var(--color-blush)",
+    galleryColors: ["var(--color-blush)", "var(--color-sage)", "var(--color-rose)"],
+    personality:
+      "Bella is affectionate and curious, always the first to greet you at the gate. She loves belly rubs and following people from room to room.",
+    healthInfo:
+      "Vet-checked with a clean bill of health. Dewormed on schedule and free of any known genetic concerns from her parents' screening.",
+    vaccinationStatus: "First round of puppy vaccinations complete",
+    readyDate: "August 15, 2026",
+    expectedAdultWeightLbs: 8,
+    motherSlug: "daisy",
+    fatherSlug: "teddy",
   },
   {
     slug: "milo",
@@ -32,6 +50,16 @@ export const FEATURED_PUPPIES: PlaceholderPuppy[] = [
     price: 2600,
     status: "available",
     placeholderColor: "var(--color-sage)",
+    galleryColors: ["var(--color-sage)", "var(--color-blush)", "var(--color-rose)"],
+    personality:
+      "Milo is playful and a little mischievous, always the first to start a game with his littermates. Settles down quickly for naps and cuddles.",
+    healthInfo:
+      "Vet-checked with a clean bill of health. Dewormed on schedule and free of any known genetic concerns from his parents' screening.",
+    vaccinationStatus: "First round of puppy vaccinations complete",
+    readyDate: "August 8, 2026",
+    expectedAdultWeightLbs: 9,
+    motherSlug: "daisy",
+    fatherSlug: "teddy",
   },
   {
     slug: "rosie",
@@ -41,6 +69,73 @@ export const FEATURED_PUPPIES: PlaceholderPuppy[] = [
     price: 2900,
     status: "reserved",
     placeholderColor: "var(--color-rose)",
+    galleryColors: ["var(--color-rose)", "var(--color-blush)", "var(--color-sage)"],
+    personality:
+      "Rosie is gentle and observant, happiest curled up near people rather than in the middle of chaos. Very responsive to her name already.",
+    healthInfo:
+      "Vet-checked with a clean bill of health. Dewormed on schedule and free of any known genetic concerns from her parents' screening.",
+    vaccinationStatus: "First and second rounds of puppy vaccinations complete",
+    readyDate: "August 1, 2026",
+    expectedAdultWeightLbs: 7,
+    motherSlug: "daisy",
+    fatherSlug: "teddy",
+  },
+  {
+    slug: "charlie",
+    name: "Charlie",
+    ageWeeks: 8,
+    gender: "male",
+    price: 2600,
+    status: "available",
+    placeholderColor: "var(--color-blush)",
+    galleryColors: ["var(--color-blush)", "var(--color-rose)", "var(--color-sage)"],
+    personality:
+      "Charlie is confident and food-motivated, which makes him quick to pick up on early training cues. Loves squeaky toys.",
+    healthInfo:
+      "Vet-checked with a clean bill of health. Dewormed on schedule and free of any known genetic concerns from his parents' screening.",
+    vaccinationStatus: "First round of puppy vaccinations complete",
+    readyDate: "August 10, 2026",
+    expectedAdultWeightLbs: 10,
+    motherSlug: "daisy",
+    fatherSlug: "teddy",
+  },
+  {
+    slug: "luna",
+    name: "Luna",
+    ageWeeks: 11,
+    gender: "female",
+    price: 2900,
+    status: "available",
+    placeholderColor: "var(--color-sage)",
+    galleryColors: ["var(--color-sage)", "var(--color-rose)", "var(--color-blush)"],
+    personality:
+      "Luna is calm and independent, content to explore on her own but always checks back in. A quiet, easy presence in the room.",
+    healthInfo:
+      "Vet-checked with a clean bill of health. Dewormed on schedule and free of any known genetic concerns from her parents' screening.",
+    vaccinationStatus: "First and second rounds of puppy vaccinations complete",
+    readyDate: "July 28, 2026",
+    expectedAdultWeightLbs: 8,
+    motherSlug: "daisy",
+    fatherSlug: "teddy",
+  },
+  {
+    slug: "max",
+    name: "Max",
+    ageWeeks: 9,
+    gender: "male",
+    price: 2700,
+    status: "sold",
+    placeholderColor: "var(--color-rose)",
+    galleryColors: ["var(--color-rose)", "var(--color-sage)", "var(--color-blush)"],
+    personality:
+      "Max is energetic and social, always up for play but settles well for bedtime. Great with other dogs already.",
+    healthInfo:
+      "Vet-checked with a clean bill of health. Dewormed on schedule and free of any known genetic concerns from his parents' screening.",
+    vaccinationStatus: "First round of puppy vaccinations complete",
+    readyDate: "August 5, 2026",
+    expectedAdultWeightLbs: 9,
+    motherSlug: "daisy",
+    fatherSlug: "teddy",
   },
 ];
 
@@ -100,6 +195,27 @@ export const TESTIMONIALS: PlaceholderTestimonial[] = [
     review:
       "Thoughtful updates, honest answers to every question, and a puppy who's been the sweetest addition to our family.",
     rating: 5,
+  },
+  {
+    id: "4",
+    customerName: "David L.",
+    review:
+      "From our first phone call to pickup day, everything felt transparent. You can tell these dogs are loved before they even leave.",
+    rating: 5,
+  },
+  {
+    id: "5",
+    customerName: "The Nguyen Family",
+    review:
+      "Our kids fell in love instantly. Great temperament, already partially potty trained, and so easy to bond with.",
+    rating: 5,
+  },
+  {
+    id: "6",
+    customerName: "Monica R.",
+    review:
+      "I appreciated how much they cared about finding the right home, not just making a sale. It showed in every interaction.",
+    rating: 4,
   },
 ];
 
@@ -173,5 +289,20 @@ export const FAQS = [
     question: "What's included when I bring my puppy home?",
     answer:
       "A starter food supply, vet and vaccination records, and ongoing support from us as they settle in.",
+  },
+  {
+    question: "Do you ship puppies?",
+    answer:
+      "We prefer in-person or a coordinated flight nanny for out-of-town families so your puppy is never alone in cargo. We're happy to talk through options.",
+  },
+  {
+    question: "Are Maltipoos hypoallergenic?",
+    answer:
+      "No dog is fully hypoallergenic, but Maltipoos are considered low-shedding and are often a good fit for people with mild allergies.",
+  },
+  {
+    question: "How big do Maltipoos get?",
+    answer:
+      "Most of our puppies mature to between 5 and 12 pounds, depending on their parents. We list an expected adult weight on each puppy's page.",
   },
 ];
