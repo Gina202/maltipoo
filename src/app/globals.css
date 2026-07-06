@@ -23,6 +23,44 @@
   /* Shadows - soft, low-opacity */
   --shadow-soft: 0 4px 24px -4px rgb(58 51 46 / 0.08);
   --shadow-soft-lg: 0 12px 48px -8px rgb(58 51 46 / 0.12);
+
+  /* Accordion open/close animation, driven by Base UI's --accordion-panel-height */
+  --animate-accordion-down: accordion-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-accordion-up: accordion-up 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+}
+
+@keyframes accordion-down {
+  from { height: 0; opacity: 0; }
+  to { height: var(--accordion-panel-height); opacity: 1; }
+}
+
+@keyframes accordion-up {
+  from { height: var(--accordion-panel-height); opacity: 1; }
+  to { height: 0; opacity: 0; }
+}
+
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--accordion-panel-height);
+    opacity: 1;
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--accordion-panel-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
 }
 
 /* Map shadcn/ui's expected variables onto our palette so every
