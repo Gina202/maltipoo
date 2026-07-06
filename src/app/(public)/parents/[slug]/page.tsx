@@ -49,6 +49,7 @@ export default async function ParentDetailPage({ params }: Props) {
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
+                loading="eager"
               />
             </div>
           ) : (
