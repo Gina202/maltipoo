@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import aboutImage from "../../../../images/about.jpg";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ScallopDivider } from "@/components/shared/ScallopDivider";
 
@@ -27,12 +29,16 @@ export default function AboutPage() {
             not a back building.
           </p>
         </div>
-        {/* TODO: replace with a real photo of the home/family via next/image */}
-        <div
-          className="aspect-[4/3] w-full flex-1 rounded-[2rem]"
-          style={{ background: "var(--color-sage)" }}
-          aria-hidden="true"
-        />
+        <div className="relative aspect-[4/3] w-full flex-1 overflow-hidden rounded-[2rem]">
+          <Image
+            src={aboutImage}
+            alt="The family home where the Maltipoos are raised"
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
       </div>
 
       <ScallopDivider color="var(--color-cream)" />

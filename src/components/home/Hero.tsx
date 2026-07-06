@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import homeImage from "../../../images/home .jpg";
 import { buttonVariants } from "@/components/ui/button";
 
 export function Hero() {
@@ -34,11 +36,16 @@ export function Hero() {
         </div>
       </div>
 
-      <div
-        className="aspect-[4/3] w-full flex-1 rounded-[2rem]"
-        style={{ background: "var(--color-blush)" }}
-        aria-hidden="true"
-      />
+      <div className="relative aspect-[4/3] w-full flex-1 overflow-hidden rounded-[2rem]">
+        <Image
+          src={homeImage}
+          alt="Maltipoo puppies in a family home"
+          fill
+          className="object-cover"
+          priority
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+      </div>
     </section>
   );
 }
