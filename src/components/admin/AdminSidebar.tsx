@@ -31,7 +31,7 @@ export function AdminSidebar() {
     <aside className="flex h-full w-full flex-col justify-between border-r border-(--color-ink)/5 bg-white p-5 md:w-64">
       <div>
         <Link href="/admin" className="mb-8 block font-display text-lg text-(--color-ink)">
-          Name Here Maltipoos
+          Maltipoo Cottage
         </Link>
         <nav className="flex flex-col gap-1">
           {NAV_ITEMS.map((item) => {

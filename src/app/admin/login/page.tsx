@@ -14,7 +14,7 @@ export default function AdminLoginPage() {
           Admin sign in
         </h1>
         <p className="mb-8 text-center text-sm text-(--color-ink-soft)">
-          Name Here Maltipoos dashboard
+          Maltipoo Cottage dashboard
         </p>
         <LoginForm />
       </div>

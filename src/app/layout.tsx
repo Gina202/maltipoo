@@ -19,8 +19,8 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default: "Name Here Maltipoos | Premium Maltipoo Puppies",
-    template: "%s | Name Here Maltipoos",
+    default: "Maltipoo Cottage | Premium Maltipoo Puppies",
+    template: "%s | Maltipoo Cottage",
   },
   description:
     "A small, loving home breeder raising healthy, well-socialized Maltipoo puppies.",

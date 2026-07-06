@@ -19,7 +19,7 @@ export async function Footer() {
         <div className="flex flex-col gap-10 md:flex-row md:justify-between">
           <div className="max-w-xs">
             <p className="font-display text-xl text-(--color-ink)">
-              Name Here Maltipoos
+              Maltipoo Cottage
             </p>
             <p className="mt-3 text-sm leading-relaxed text-(--color-ink-soft)">
               A small home breeder raising healthy, well-socialized Maltipoo
@@ -61,7 +61,7 @@ export async function Footer() {
         </div>
 
         <div className="mt-12 border-t border-(--color-ink)/10 pt-6 text-center text-xs text-(--color-ink-soft)">
-          © {new Date().getFullYear()} Name Here Maltipoos. All rights
+          © {new Date().getFullYear()} Maltipoo Cottage. All rights
           reserved.
         </div>
       </div>

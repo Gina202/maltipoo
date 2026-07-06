@@ -21,7 +21,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-(--color-ink)/5 bg-white/90 backdrop-blur-sm">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="font-display text-xl text-(--color-ink)">
-          Name Here Maltipoos
+          Maltipoo Cottage
         </Link>
 
         {/* Desktop nav */}
