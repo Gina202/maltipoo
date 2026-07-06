@@ -19,37 +19,33 @@ type PuppyFormProps = {
 };
 
 export function PuppyForm({ parents, puppyId, defaultValues }: PuppyFormProps) {
-  const [images, setImages] = useState<string[]>(defaultValues?.images ?? []);
-  const [imagesError, setImagesError] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
   const isEditing = Boolean(puppyId);
 
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<PuppyFormInput, unknown, PuppyFormValues>({
     resolver: zodResolver(puppyFormSchema),
     defaultValues: {
       gender: "female",
       status: "available",
+      images: [],
       ...defaultValues,
     },
   });
 
+  const images = watch("images") ?? [];
+
   async function onSubmit(values: PuppyFormValues) {
     setServerError(null);
 
-    if (images.length === 0) {
-      setImagesError("Add at least one photo before saving.");
-      return;
-    }
-    setImagesError(null);
-
-    const payload = { ...values, images };
     const result = isEditing
-      ? await updatePuppy(puppyId!, payload)
-      : await createPuppy(payload);
+      ? await updatePuppy(puppyId!, values)
+      : await createPuppy(values);
 
     // Successful create/update redirects server-side, so we only reach
     // here on failure.
@@ -62,9 +58,13 @@ export function PuppyForm({ parents, puppyId, defaultValues }: PuppyFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8" noValidate>
       {/* Photos */}
       <Section title="Photos">
-        <ImageUploader value={images} onChange={setImages} pathPrefix="puppies" />
-        {imagesError && (
-          <p className="mt-2 text-xs text-(--color-rose-dark)">{imagesError}</p>
+        <ImageUploader
+          value={images}
+          onChange={(urls) => setValue("images", urls, { shouldValidate: true })}
+          pathPrefix="puppies"
+        />
+        {errors.images && (
+          <p className="mt-2 text-xs text-(--color-rose-dark)">{errors.images.message}</p>
         )}
       </Section>
 
