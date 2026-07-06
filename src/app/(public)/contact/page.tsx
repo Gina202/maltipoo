@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { getPuppyBySlug } from "@/features/puppies/queries";
+import { getSiteSettings } from "@/features/settings/queries";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -9,7 +11,23 @@ export const metadata: Metadata = {
     "Get in touch about our available Maltipoo puppies. We respond quickly by chat, phone, or email.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ puppy?: string; intent?: string }>;
+}) {
+  const params = await searchParams;
+  const [puppy, settings] = await Promise.all([
+    params.puppy ? getPuppyBySlug(params.puppy) : Promise.resolve(null),
+    getSiteSettings(),
+  ]);
+
+  const initialMessage = puppy
+    ? params.intent === "reserve"
+      ? `Hi, I'd like to reserve ${puppy.name}. Please let me know the next steps.`
+      : `Hi, I'm interested in learning more about ${puppy.name}.`
+    : undefined;
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
       <SectionHeading
@@ -20,17 +38,22 @@ export default function ContactPage() {
       />
 
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
-        <ContactForm />
+        <ContactForm initialMessage={initialMessage} puppySlug={puppy?.slug} />
 
         <div className="flex flex-col gap-6">
-          <InfoRow icon={Phone} label="Phone" value="(000) 000-0000" />
-          <InfoRow icon={Mail} label="Email" value="hello@example.com" />
-          <InfoRow icon={MapPin} label="Location" value="By appointment only" />
-          <InfoRow
-            icon={Clock}
-            label="Hours"
-            value="Mon-Sat, 9am-6pm — chat with us anytime"
-          />
+          {settings?.phone && <InfoRow icon={Phone} label="Phone" value={settings.phone} />}
+          {settings?.email && <InfoRow icon={Mail} label="Email" value={settings.email} />}
+          {settings?.address && (
+            <InfoRow icon={MapPin} label="Location" value={settings.address} />
+          )}
+          {settings?.business_hours && (
+            <InfoRow icon={Clock} label="Hours" value={settings.business_hours} />
+          )}
+          {!settings?.phone && !settings?.email && !settings?.address && !settings?.business_hours && (
+            <p className="text-sm text-(--color-ink-soft)">
+              Use the form to reach us &mdash; we'll get back to you soon.
+            </p>
+          )}
         </div>
       </div>
     </div>

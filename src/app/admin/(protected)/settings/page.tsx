@@ -1,12 +1,24 @@
-export default function AdminSettingsPage() {
+import { SettingsForm } from "@/components/admin/forms/SettingsForms";
+import { getSiteSettings } from "@/features/settings/queries";
+
+export default async function AdminSettingsPage() {
+  const settings = await getSiteSettings();
+
   return (
     <div>
       <h1 className="font-display text-2xl text-(--color-ink)">Settings</h1>
       <p className="mt-1 text-sm text-(--color-ink-soft)">
         Business contact info shown in your site footer and contact page.
       </p>
-      <div className="mt-8 rounded-[1.5rem] bg-white p-8 text-center text-sm text-(--color-ink-soft)">
-        Settings management is coming in a later phase.
+      <div className="mt-8 max-w-2xl">
+        <SettingsForm
+          defaultValues={{
+            phone: settings?.phone ?? "",
+            email: settings?.email ?? "",
+            address: settings?.address ?? "",
+            businessHours: settings?.business_hours ?? "",
+          }}
+        />
       </div>
     </div>
   );

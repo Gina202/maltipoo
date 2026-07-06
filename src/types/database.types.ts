@@ -117,6 +117,7 @@ export type Database = {
           breed: string
           created_at: string | null
           description: string | null
+          gender: string | null
           health_info: string | null
           id: string
           main_image_url: string | null
@@ -130,6 +131,7 @@ export type Database = {
           breed?: string
           created_at?: string | null
           description?: string | null
+          gender?: string | null
           health_info?: string | null
           id?: string
           main_image_url?: string | null
@@ -143,6 +145,7 @@ export type Database = {
           breed?: string
           created_at?: string | null
           description?: string | null
+          gender?: string | null
           health_info?: string | null
           id?: string
           main_image_url?: string | null

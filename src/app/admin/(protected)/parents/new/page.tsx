@@ -7,7 +7,7 @@ export default async function NewPuppyPage() {
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="mb-6 font-display text-2xl text-(--color-ink)">
-        Add a new puppy
+        Add a new parent
       </h1>
       <PuppyForm parents={parents} />
     </div>

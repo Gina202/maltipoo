@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { PuppyForm } from "@/components/admin/forms/PuppyForm";
 import { getPuppyById } from "@/features/puppies/queries";
-import {getAllParents} from "@/features/parents/queries";
+import { getAllParents } from "@/features/parents/queries";
 import type { PuppyFormValues } from "@/features/puppies/schema";
 
 type Props = {

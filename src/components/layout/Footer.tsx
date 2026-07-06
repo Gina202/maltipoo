@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getSiteSettings } from "@/features/settings/queries";
 
 const NAV_LINKS = [
   { href: "/about", label: "About" },
@@ -9,7 +10,9 @@ const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const settings = await getSiteSettings();
+
   return (
     <footer className="bg-(--color-cream)">
       <div className="mx-auto max-w-6xl px-6 py-14">
@@ -47,9 +50,12 @@ export function Footer() {
               Contact
             </p>
             <ul className="flex flex-col gap-2 text-sm text-(--color-ink-soft)">
-              <li>Phone: (000) 000-0000</li>
-              <li>Email: hello@example.com</li>
-              <li>By appointment only</li>
+              {settings?.phone && <li>Phone: {settings.phone}</li>}
+              {settings?.email && <li>Email: {settings.email}</li>}
+              {settings?.address && <li>{settings.address}</li>}
+              {!settings?.phone && !settings?.email && !settings?.address && (
+                <li>Get in touch through our contact page</li>
+              )}
             </ul>
           </div>
         </div>

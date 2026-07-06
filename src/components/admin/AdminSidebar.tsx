@@ -7,6 +7,7 @@ import {
   Dog,
   Heart,
   MessageSquareQuote,
+  HelpCircle,
   Inbox,
   Settings,
   LogOut,
@@ -18,6 +19,7 @@ const NAV_ITEMS = [
   { href: "/admin/puppies", label: "Puppies", icon: Dog },
   { href: "/admin/parents", label: "Parents", icon: Heart },
   { href: "/admin/testimonials", label: "Testimonials", icon: MessageSquareQuote },
+  { href: "/admin/faqs", label: "FAQs", icon: HelpCircle },
   { href: "/admin/inquiries", label: "Inquiries", icon: Inbox },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];

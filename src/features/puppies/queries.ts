@@ -85,8 +85,6 @@ async function hydratePuppy(puppy: PuppyRow): Promise<PuppyWithParents> {
   };
 }
 
-export async function getAllParents() {
-  const supabase = await createClient();
-  const { data } = await supabase.from("parents").select("*").order("name");
-  return data || [];
-}
+// Note: getAllParents for the puppy form's Mother/Father dropdown now lives
+// in @/features/parents/queries - see that file for the canonical version
+// (this one used to duplicate a lightweight version before Phase 9).
