@@ -1,16 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import { Dog, ChevronLeft, ChevronRight } from "lucide-react";
 
 type PuppyCarouselProps = {
-  images: string[]; // TODO: swap to real image URLs once photos are uploaded (Phase 8)
+  images: string[];
   alt: string;
 };
 
 export function PuppyCarousel({ images, alt }: PuppyCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  if (images.length === 0) {
+    return (
+      <div className="flex aspect-square w-full items-center justify-center rounded-[1.5rem] bg-(--color-cream)">
+        <Dog className="h-10 w-10 text-(--color-ink-soft)" aria-hidden="true" />
+      </div>
+    );
+  }
 
   const goTo = (index: number) => {
     setActiveIndex((index + images.length) % images.length);
@@ -38,8 +47,7 @@ export function PuppyCarousel({ images, alt }: PuppyCarouselProps) {
     <div>
       {/* Main image */}
       <div
-        className="relative aspect-square w-full overflow-hidden rounded-[1.5rem] outline-none"
-        style={{ background: images[activeIndex] }}
+        className="relative aspect-square w-full overflow-hidden rounded-[1.5rem] bg-(--color-cream) outline-none"
         role="group"
         aria-roledescription="carousel"
         aria-label={alt}
@@ -48,6 +56,15 @@ export function PuppyCarousel({ images, alt }: PuppyCarouselProps) {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
+        <Image
+          src={images[activeIndex]}
+          alt={`${alt} photo ${activeIndex + 1} of ${images.length}`}
+          fill
+          priority={activeIndex === 0}
+          className="object-cover"
+          sizes="(min-width: 1024px) 50vw, 100vw"
+        />
+
         {images.length > 1 && (
           <>
             <button
@@ -85,18 +102,19 @@ export function PuppyCarousel({ images, alt }: PuppyCarouselProps) {
       {/* Thumbnail strip */}
       {images.length > 1 && (
         <div className="mt-3 flex gap-3">
-          {images.map((color, i) => (
+          {images.map((src, i) => (
             <button
-              key={i}
+              key={src}
               type="button"
               onClick={() => goTo(i)}
               aria-label={`View photo ${i + 1} of ${images.length}`}
               aria-current={i === activeIndex}
-              className={`h-16 w-16 shrink-0 rounded-[0.75rem] outline-none ring-2 ring-offset-2 transition-all ${
+              className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-[0.75rem] outline-none ring-2 ring-offset-2 transition-all ${
                 i === activeIndex ? "ring-(--color-rose)" : "ring-transparent"
               }`}
-              style={{ background: color }}
-            />
+            >
+              <Image src={src} alt="" fill className="object-cover" sizes="64px" />
+            </button>
           ))}
         </div>
       )}

@@ -1,25 +1,38 @@
 import Link from "next/link";
+import Image from "next/image";
+import { Dog } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import type { PlaceholderPuppy } from "@/constants/placeholder-data";
+import type { PuppyWithImages } from "@/features/puppies/types";
 
-const STATUS_LABEL: Record<PlaceholderPuppy["status"], string> = {
+const STATUS_LABEL: Record<string, string> = {
   available: "Available",
   reserved: "Reserved",
   sold: "Sold",
 };
 
-export function PuppyCard({ puppy }: { puppy: PlaceholderPuppy }) {
+export function PuppyCard({ puppy }: { puppy: PuppyWithImages }) {
+  const coverImage = puppy.images[0];
+
   return (
     <Link
       href={`/puppies/${puppy.slug}`}
       className="group block overflow-hidden rounded-[1.5rem] bg-white shadow-[var(--shadow-soft)] transition-shadow hover:shadow-[var(--shadow-soft-lg)]"
     >
-      {/* TODO: replace with next/image once real puppy photos are uploaded */}
-      <div
-        className="aspect-square w-full"
-        style={{ background: puppy.placeholderColor }}
-        aria-hidden="true"
-      />
+      <div className="relative aspect-square w-full bg-(--color-cream)">
+        {coverImage ? (
+          <Image
+            src={coverImage}
+            alt={puppy.name}
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <Dog className="h-8 w-8 text-(--color-ink-soft)" aria-hidden="true" />
+          </div>
+        )}
+      </div>
       <div className="p-5">
         <div className="mb-2 flex items-center justify-between">
           <h3 className="font-display text-lg text-(--color-ink)">
@@ -33,12 +46,12 @@ export function PuppyCard({ puppy }: { puppy: PlaceholderPuppy }) {
                 : "bg-(--color-cream) text-(--color-ink-soft)"
             }
           >
-            {STATUS_LABEL[puppy.status]}
+            {STATUS_LABEL[puppy.status ?? "available"]}
           </Badge>
         </div>
         <p className="text-sm text-(--color-ink-soft)">
           {puppy.gender === "female" ? "Female" : "Male"} &middot;{" "}
-          {puppy.ageWeeks} weeks
+          {puppy.age_weeks} weeks
         </p>
         <p className="mt-3 font-display text-xl text-(--color-rose)">
           ${puppy.price.toLocaleString()}

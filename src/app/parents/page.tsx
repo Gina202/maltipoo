@@ -20,7 +20,16 @@ export default function ParentsPage() {
       />
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         {PARENTS.map((parent) => (
-          <ParentCard key={parent.slug} parent={parent} />
+          <ParentCard
+            key={parent.slug}
+            parent={{
+              slug: parent.slug,
+              name: parent.name,
+              role: parent.role,
+              temperament: parent.temperament,
+              placeholderColor: parent.placeholderColor,
+            }}
+          />
         ))}
       </div>
     </div>

@@ -3,47 +3,59 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { PuppyCTAButtons } from "@/components/puppies/PuppyCTAButtons";
 import { PuppyCarousel } from "@/components/puppies/PuppyCarousel";
-import { ParentCard } from "@/components/parents/ParentCard";
+import { ParentCard, type ParentCardData } from "@/components/parents/ParentCard";
 import { RelatedPuppies } from "@/components/puppies/RelatedPuppies";
-import { ALL_PUPPIES, PARENTS } from "@/constants/placeholder-data";
+import { getPuppyBySlug, getAllPuppies } from "@/features/puppies/queries";
+import { createStaticClient } from "@/lib/supabase/static";
+import type { ParentRow } from "@/features/puppies/types";
 
-const STATUS_LABEL = {
+const STATUS_LABEL: Record<string, string> = {
   available: "Available",
   reserved: "Reserved",
   sold: "Sold",
-} as const;
+};
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
 export async function generateStaticParams() {
-  return ALL_PUPPIES.map((puppy) => ({ slug: puppy.slug }));
+  const supabase = createStaticClient();
+  const { data } = await supabase.from("puppies").select("slug");
+  return (data ?? []).map((puppy) => ({ slug: puppy.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const puppy = ALL_PUPPIES.find((p) => p.slug === slug);
+  const puppy = await getPuppyBySlug(slug);
   if (!puppy) return {};
 
   return {
-    title: puppy.name,
-    description: puppy.personality,
+    title: puppy.seo_title || puppy.name,
+    description: puppy.seo_description || puppy.personality || undefined,
+  };
+}
+
+function toParentCard(parent: ParentRow, role: "Mother" | "Father"): ParentCardData {
+  return {
+    slug: parent.slug,
+    name: parent.name,
+    role,
+    temperament: parent.temperament,
+    imageUrl: parent.main_image_url,
   };
 }
 
 export default async function PuppyDetailPage({ params }: Props) {
   const { slug } = await params;
-  const puppy = ALL_PUPPIES.find((p) => p.slug === slug);
+  const puppy = await getPuppyBySlug(slug);
 
   if (!puppy) notFound();
 
-  const mother = PARENTS.find((p) => p.slug === puppy.motherSlug);
-  const father = PARENTS.find((p) => p.slug === puppy.fatherSlug);
-
-  const related = ALL_PUPPIES.filter(
-    (p) => p.slug !== puppy.slug && p.gender === puppy.gender
-  ).slice(0, 3);
+  const allPuppies = await getAllPuppies();
+  const related = allPuppies
+    .filter((p) => p.slug !== puppy.slug && p.gender === puppy.gender)
+    .slice(0, 3);
 
   const isAvailable = puppy.status === "available";
 
@@ -51,7 +63,7 @@ export default async function PuppyDetailPage({ params }: Props) {
     <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         {/* Carousel */}
-        <PuppyCarousel images={puppy.galleryColors} alt={puppy.name} />
+        <PuppyCarousel images={puppy.images} alt={puppy.name} />
 
         {/* Info */}
         <div>
@@ -67,47 +79,52 @@ export default async function PuppyDetailPage({ params }: Props) {
                   : "bg-(--color-cream) text-(--color-ink-soft)"
               }
             >
-              {STATUS_LABEL[puppy.status]}
+              {STATUS_LABEL[puppy.status ?? "available"]}
             </Badge>
           </div>
 
           <p className="mt-2 text-sm text-(--color-ink-soft)">
             {puppy.gender === "female" ? "Female" : "Male"} &middot;{" "}
-            {puppy.ageWeeks} weeks old
+            {puppy.age_weeks} weeks old
           </p>
 
           <p className="mt-5 font-display text-3xl text-(--color-rose)">
             ${puppy.price.toLocaleString()}
           </p>
 
-          <p className="mt-6 text-base leading-relaxed text-(--color-ink-soft)">
-            {puppy.personality}
-          </p>
+          {puppy.personality && (
+            <p className="mt-6 text-base leading-relaxed text-(--color-ink-soft)">
+              {puppy.personality}
+            </p>
+          )}
 
           {/* Quick facts */}
           <dl className="mt-8 grid grid-cols-2 gap-4 rounded-[1.5rem] bg-(--color-cream) p-6">
-            <Fact label="Ready date" value={puppy.readyDate} />
+            <Fact label="Ready date" value={puppy.ready_date} />
             <Fact
               label="Expected adult weight"
-              value={`${puppy.expectedAdultWeightLbs} lbs`}
+              value={puppy.expected_adult_weight ? `${puppy.expected_adult_weight} lbs` : null}
             />
-            <Fact label="Vaccinations" value={puppy.vaccinationStatus} />
-            <Fact label="Health" value={puppy.healthInfo} />
+            <Fact label="Vaccinations" value={puppy.vaccination_status} />
+            <Fact label="Health" value={puppy.health_info} />
           </dl>
 
-          <PuppyCTAButtons slug={puppy.slug} status={puppy.status} />
+          <PuppyCTAButtons
+            slug={puppy.slug}
+            status={(puppy.status ?? "available") as "available" | "reserved" | "sold"}
+          />
         </div>
       </div>
 
       {/* Parents */}
-      {(mother || father) && (
+      {(puppy.mother || puppy.father) && (
         <div className="mt-20">
           <h2 className="font-display text-2xl text-(--color-ink)">
             Meet {puppy.name}'s parents
           </h2>
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {mother && <ParentCard parent={mother} />}
-            {father && <ParentCard parent={father} />}
+            {puppy.mother && <ParentCard parent={toParentCard(puppy.mother, "Mother")} />}
+            {puppy.father && <ParentCard parent={toParentCard(puppy.father, "Father")} />}
           </div>
         </div>
       )}
@@ -117,7 +134,8 @@ export default async function PuppyDetailPage({ params }: Props) {
   );
 }
 
-function Fact({ label, value }: { label: string; value: string }) {
+function Fact({ label, value }: { label: string; value: string | null }) {
+  if (!value) return null;
   return (
     <div>
       <dt className="text-xs font-semibold uppercase tracking-wide text-(--color-ink-soft)">

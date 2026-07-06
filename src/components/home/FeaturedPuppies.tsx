@@ -2,9 +2,13 @@ import Link from "next/link";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { PuppyCard } from "@/components/puppies/PuppyCard";
 import { buttonVariants } from "@/components/ui/button";
-import { ALL_PUPPIES } from "@/constants/placeholder-data";
+import { getAvailablePuppies } from "@/features/puppies/queries";
 
-export function FeaturedPuppies() {
+export async function FeaturedPuppies() {
+  const puppies = await getAvailablePuppies(3);
+
+  if (puppies.length === 0) return null;
+
   return (
     <section className="bg-(--color-cream) px-6 py-16 sm:py-20">
       <div className="mx-auto max-w-6xl">
@@ -15,7 +19,7 @@ export function FeaturedPuppies() {
         />
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {ALL_PUPPIES.slice(0, 3).map((puppy) => (
+          {puppies.map((puppy) => (
             <PuppyCard key={puppy.slug} puppy={puppy} />
           ))}
         </div>

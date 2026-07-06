@@ -1,10 +1,10 @@
 import { PuppyCard } from "@/components/puppies/PuppyCard";
-import type { PlaceholderPuppy } from "@/constants/placeholder-data";
+import type { PuppyWithImages } from "@/features/puppies/types";
 
 export function RelatedPuppies({
   puppies,
 }: {
-  puppies: PlaceholderPuppy[];
+  puppies: PuppyWithImages[];
 }) {
   if (puppies.length === 0) return null;
 

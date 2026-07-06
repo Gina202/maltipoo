@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { PuppyCard } from "@/components/puppies/PuppyCard";
-import type { PlaceholderPuppy } from "@/constants/placeholder-data";
+import type { PuppyWithImages } from "@/features/puppies/types";
 
 type SexFilter = "all" | "male" | "female";
 type StatusFilter = "all" | "available" | "reserved" | "sold";
@@ -20,7 +20,7 @@ const STATUS_OPTIONS: { value: StatusFilter; label: string }[] = [
   { value: "sold", label: "Sold" },
 ];
 
-export function PuppyBrowser({ puppies }: { puppies: PlaceholderPuppy[] }) {
+export function PuppyBrowser({ puppies }: { puppies: PuppyWithImages[] }) {
   const [sex, setSex] = useState<SexFilter>("all");
   const [status, setStatus] = useState<StatusFilter>("all");
 
