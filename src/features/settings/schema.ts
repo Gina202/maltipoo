@@ -8,6 +8,7 @@ export const settingsFormSchema = z.object({
   email: z.string().trim().email("Enter a valid email").optional().or(z.literal("")),
   address: z.string().trim().optional(),
   businessHours: z.string().trim().optional(),
+  smartsuppKey: z.string().trim().optional(),
 });
 
 export type SettingsFormValues = z.infer<typeof settingsFormSchema>;

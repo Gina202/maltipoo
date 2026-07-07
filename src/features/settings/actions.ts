@@ -25,6 +25,7 @@ export async function updateSiteSettings(values: SettingsFormValues): Promise<Ac
       email: toNullable(v.email),
       address: toNullable(v.address),
       business_hours: toNullable(v.businessHours),
+      smartsupp_key: toNullable(v.smartsuppKey),
     })
     .eq("id", 1);
 

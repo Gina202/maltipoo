@@ -61,6 +61,19 @@ export function SettingsForm({ defaultValues }: { defaultValues: SettingsFormVal
         </div>
       </div>
 
+      <div className="rounded-[1.5rem] bg-white p-6">
+        <h2 className="mb-1 font-display text-lg text-(--color-ink)">Live chat</h2>
+        <p className="mb-5 text-sm text-(--color-ink-soft)">
+          Paste your Smartsupp account key to show the chat widget on every
+          public page. Find it in your Smartsupp dashboard under Settings →
+          General.
+        </p>
+        <div>
+          <Label className="mb-2 block text-sm text-(--color-ink)">Smartsupp key</Label>
+          <Input {...register("smartsuppKey")} placeholder="e.g. 4f2a1b9c..." />
+        </div>
+      </div>
+
       {status === "success" && (
         <p className="text-sm text-(--color-sage-dark)">Settings saved.</p>
       )}

@@ -252,18 +252,14 @@ export const ADOPTION_STEPS = [
     title: "Reach out",
     description: "Send an inquiry through chat or our contact form to introduce yourself.",
   },
+
   {
     number: "02",
-    title: "Meet the puppy",
-    description: "We'll schedule a video call or in-person visit so you can meet before deciding.",
-  },
-  {
-    number: "03",
     title: "Reserve",
     description: "A deposit secures your puppy while they finish growing and their final vet check.",
   },
   {
-    number: "04",
+    number: "03",
     title: "Bring them home",
     description: "We'll coordinate a ready date and walk you through everything they'll need.",
   },

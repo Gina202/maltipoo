@@ -17,6 +17,7 @@ export default async function AdminSettingsPage() {
             email: settings?.email ?? "",
             address: settings?.address ?? "",
             businessHours: settings?.business_hours ?? "",
+            smartsuppKey: settings?.smartsupp_key ?? "",
           }}
         />
       </div>
