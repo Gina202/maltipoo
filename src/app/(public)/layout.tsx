@@ -15,7 +15,7 @@ export default async function PublicLayout({
       <Navbar />
       <main>{children}</main>
       <Footer />
-      <SmartsuppWidget smartsuppKey="48073b78b7eb482e25a5d12dc7b0e433224f2cbb" />
+      <SmartsuppWidget smartsuppKey={settings?.smartsupp_key ?? null} />
     </>
   );
 }
