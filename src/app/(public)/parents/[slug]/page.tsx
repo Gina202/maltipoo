@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PuppyCarousel } from "@/components/puppies/PuppyCarousel";
+import { PuppyCard } from "@/components/puppies/PuppyCard";
 import { getParentBySlug } from "@/features/parents/queries";
+import { getAllPuppies } from "@/features/puppies/queries";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -11,12 +12,24 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const parent = await getParentBySlug(slug);
-
   if (!parent) return {};
 
+  const roleLabel = parent.gender === "male" ? "Father" : "Mother";
+  const title = `${parent.name} - ${roleLabel}`;
+  const description =
+    parent.description ||
+    parent.temperament ||
+    `Meet ${parent.name}, one of the parent dogs behind our Maltipoo puppies.`;
+
   return {
-    title: parent.name,
-    description: parent.temperament ?? parent.breed ?? "Meet this parent dog.",
+    title,
+    description,
+    alternates: { canonical: `/parents/${parent.slug}` },
+    openGraph: {
+      title,
+      description,
+      images: parent.images[0] ? [{ url: parent.images[0] }] : undefined,
+    },
   };
 }
 
@@ -26,79 +39,73 @@ export default async function ParentDetailPage({ params }: Props) {
 
   if (!parent) notFound();
 
-  const role =
-    parent.gender === "male" ? "Father" : parent.gender === "female" ? "Mother" : "Parent";
-  const imageUrl = parent.images[0] ?? parent.main_image_url;
+  const roleLabel = parent.gender === "male" ? "Father" : "Mother";
+
+  const allPuppies = await getAllPuppies();
+  const theirPuppies = allPuppies.filter(
+    (p) => p.mother_id === parent.id || p.father_id === parent.id
+  );
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-16 sm:py-20">
-      <Link
-        href="/parents"
-        className="text-sm font-semibold uppercase tracking-[0.2em] text-(--color-rose) transition-opacity hover:opacity-80"
-      >
-        ← Back to parents
-      </Link>
-
-      <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,0.95fr)_1.05fr]">
-        <div className="rounded-[2rem] bg-(--color-cream) p-4 sm:p-6">
-          {imageUrl ? (
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]">
-              <Image
-                src={imageUrl}
-                alt={parent.name}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                loading="eager"
-              />
-            </div>
-          ) : (
-            <div className="flex aspect-[4/5] items-center justify-center rounded-[1.5rem] bg-white/70 px-6 text-center text-sm text-(--color-ink-soft)">
-              No photo has been added for this parent yet.
-            </div>
-          )}
-        </div>
+    <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
+        <PuppyCarousel images={parent.images} alt={parent.name} />
 
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-(--color-rose)">
-            {role}
+          <p className="text-xs font-semibold uppercase tracking-wide text-(--color-rose)">
+            {roleLabel}
           </p>
-          <h1 className="mt-2 font-display text-3xl text-(--color-ink) sm:text-4xl">
+          <h1 className="mt-1 font-display text-3xl text-(--color-ink) sm:text-4xl">
             {parent.name}
           </h1>
 
-          <p className="mt-5 text-base leading-relaxed text-(--color-ink-soft)">
-            {parent.description ?? "A wonderful member of our Maltipoo family."}
-          </p>
+          {parent.description && (
+            <p className="mt-6 text-base leading-relaxed text-(--color-ink-soft)">
+              {parent.description}
+            </p>
+          )}
 
-          <dl className="mt-8 grid gap-4 rounded-[1.5rem] bg-white p-6 shadow-[var(--shadow-soft)]">
-            <Fact label="Breed" value={parent.breed} />
-            <Fact
-              label="Gender"
-              value={parent.gender === "female" ? "Female" : parent.gender === "male" ? "Male" : null}
-            />
-            <Fact label="Temperament" value={parent.temperament} />
-            <Fact
-              label="Weight"
-              value={parent.weight_lbs ? `${parent.weight_lbs} lbs` : null}
-            />
-            <Fact label="Health info" value={parent.health_info} />
+          <dl className="mt-8 grid grid-cols-2 gap-4 rounded-[1.5rem] bg-(--color-cream) p-6">
+            {parent.temperament && (
+              <div className="col-span-2">
+                <dt className="text-xs font-semibold uppercase tracking-wide text-(--color-ink-soft)">
+                  Temperament
+                </dt>
+                <dd className="mt-1 text-sm text-(--color-ink)">{parent.temperament}</dd>
+              </div>
+            )}
+            {parent.weight_lbs && (
+              <div>
+                <dt className="text-xs font-semibold uppercase tracking-wide text-(--color-ink-soft)">
+                  Weight
+                </dt>
+                <dd className="mt-1 text-sm text-(--color-ink)">{parent.weight_lbs} lbs</dd>
+              </div>
+            )}
+            {parent.health_info && (
+              <div>
+                <dt className="text-xs font-semibold uppercase tracking-wide text-(--color-ink-soft)">
+                  Health
+                </dt>
+                <dd className="mt-1 text-sm text-(--color-ink)">{parent.health_info}</dd>
+              </div>
+            )}
           </dl>
         </div>
       </div>
-    </div>
-  );
-}
 
-function Fact({ label, value }: { label: string; value: string | null }) {
-  if (!value) return null;
-
-  return (
-    <div>
-      <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-(--color-ink-soft)">
-        {label}
-      </dt>
-      <dd className="mt-1 text-sm text-(--color-ink)">{value}</dd>
+      {theirPuppies.length > 0 && (
+        <div className="mt-20">
+          <h2 className="font-display text-2xl text-(--color-ink)">
+            {parent.name}'s puppies
+          </h2>
+          <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {theirPuppies.map((puppy) => (
+              <PuppyCard key={puppy.id} puppy={puppy} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

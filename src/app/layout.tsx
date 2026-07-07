@@ -18,6 +18,10 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://maltipoo-three.vercel.app"
+  ),
+  
   title: {
     default: "Maltipoo Cottage | Premium Maltipoo Puppies",
     template: "%s | Maltipoo Cottage",
