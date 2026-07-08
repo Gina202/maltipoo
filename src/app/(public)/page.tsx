@@ -1,3 +1,4 @@
+import { WelcomePopup } from "@/components/home/WelcomePopup";
 import { Hero } from "@/components/home/Hero";
 import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { FeaturedPuppies } from "@/components/home/FeaturedPuppies";
@@ -11,6 +12,7 @@ import { ScallopDivider } from "@/components/shared/ScallopDivider";
 export default function Home() {
   return (
     <>
+      <WelcomePopup />
       <Hero />
       <WhyChooseUs />
       <ScallopDivider color="var(--color-cream)" />
