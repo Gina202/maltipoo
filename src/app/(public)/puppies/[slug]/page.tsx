@@ -30,9 +30,47 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const puppy = await getPuppyBySlug(slug);
   if (!puppy) return {};
 
+  const genderLabel = puppy.gender === "male" ? "Male" : "Female";
+
+  // The admin's custom SEO title is treated as an addition, not a replacement -
+  // the puppy's actual name should always be identifiable in the tab title.
+  const title = puppy.seo_title
+    ? `${puppy.name} | ${puppy.seo_title}`
+    : `${puppy.name} - ${genderLabel} Maltipoo Puppy for Sale`;
+
+  // Only trust the custom SEO description if it's actually description-length;
+  // otherwise build a full one from real facts so it's never a single word.
+  const hasSubstantiveCustomDescription =
+    puppy.seo_description && puppy.seo_description.trim().length >= 40;
+
+  const storyText = puppy.description || puppy.personality;
+
+  const description = hasSubstantiveCustomDescription
+    ? puppy.seo_description!
+    : `${puppy.name} is a ${genderLabel.toLowerCase()} Maltipoo puppy, ${puppy.age_weeks ?? "?"} weeks old and ${puppy.status === "available" ? "available now" : puppy.status}.${
+        storyText ? ` ${storyText}` : ""
+      } Priced at $${Number(puppy.price).toLocaleString()}.`;
+
+  const image = puppy.main_image_url ?? undefined;
+
   return {
-    title: puppy.seo_title || puppy.name,
-    description: puppy.seo_description || puppy.personality || undefined,
+    title,
+    description,
+    alternates: {
+      canonical: `/puppies/${puppy.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      images: image ? [{ url: image }] : undefined,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: image ? [image] : undefined,
+    },
   };
 }
 
@@ -92,8 +130,15 @@ export default async function PuppyDetailPage({ params }: Props) {
             ${puppy.price.toLocaleString()}
           </p>
 
+          {puppy.description && (
+            <p className="mt-6 text-base leading-relaxed text-(--color-ink)">
+              {puppy.description}
+            </p>
+          )}
+
           {puppy.personality && (
-            <p className="mt-6 text-base leading-relaxed text-(--color-ink-soft)">
+            <p className="mt-4 text-sm leading-relaxed text-(--color-ink-soft)">
+              <span className="font-semibold text-(--color-ink)">Personality: </span>
               {puppy.personality}
             </p>
           )}
